@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://in.pinterest.com/pin/265008759319118103/">
+    <link rel="stylesheet" href="style2.css">
+    <title>Smart contract</title>
+</head>
+<body class="body">
+
+	
+
+<div class="box-0">
+    <h1 class="heading">CrowdFunding</h1>
+</div>
+<div class="box-1">
+    <div class="container">
+		
+        
+        <button class="btn btn1" ><a href="create.html" style="text-decoration: none;" >Create</a></button><br>
+        
+        <button class="btn btn2"><a href="contributer.html" style="text-decoration: none;">Contributor</a></button>
+        <button class="btn btn3"><a href="request.html" style="text-decoration: none;"> request</a></button>
+        <button class="btn btn3" onclick="connectMetamask()">Connect to Metamask</button><br>
+        <p id="accountArea"></p>
+        <button class="btn btn4">No. of Contributor</button>
+        <button class="btn btn5">No. of Reguest</button>
+    </div>
+</div>
+
+
+    <script src="https://github.com/ChainSafe/web3.js/blob/v1.2.11/dist/web3.min.js></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="app.js"></script>
+	
+
+
+    <script>
+        var contract;
+        $(document).ready(function()
+        {
+            web3 = new Web3(web3.currentProvider);
+			contract:null
+
+            var address = "0x83328E797bF271EA022ceB5A6Cb2E4aFA0E9B092";//contract address after deploying
+            var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_target",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_deadline",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "contributors",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "address payable",
+				"name": "_recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "createRequests",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deadline",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getContractBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_requestNo",
+				"type": "uint256"
+			}
+		],
+		"name": "makePayment",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "manager",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "minimumContribution",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "noOfContributors",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "numRequests",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "raisedAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "refund",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "requests",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "address payable",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "completed",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "noOfVoters",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "sendEth",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "target",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_requestNo",
+				"type": "uint256"
+			}
+		],
+		"name": "voteRequest",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]; 
+
+var address = "0x83328E797bF271EA022ceB5A6Cb2E4aFA0E9B092";//contract address after deploying
+            contract = new web3.eth.Contract(abi, address);
+
+            // contract.methods.getContractBalance.call().then(function(bal){
+            //     $(#balance).html(bal);
+            //  })
+
+
+        })
+    </script>
+
+    <script>
+        let account;
+        const connectMetamask = async () => {
+            if(window.ethereum !== "undefined") {
+                const accounts = await ethereum.request({method: "eth_requestAccounts"});
+                account = accounts[0];
+                document.getElementById("accountArea").innerHTML = account;
+				const contract = await loadContract("Crowdfunding",provider)
+				contract
+
+            }
+        };
+
+
+
+
+		
+		
+
+        //take data
+        // const readContract = async () => {
+        //     const data = await window.contract.methods.getContractBalance().call();
+        //     document.getElementById("dataArea").innerHTML = data;
+        // }
+    </script>
+
+<!-- <footer><p>Licenced by Upamanyu</p></footer> -->
+</body>
+</html>
